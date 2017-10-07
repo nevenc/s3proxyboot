@@ -1,0 +1,40 @@
+#
+# Examples
+#
+#   Need to configure DNS CNAME '*.s3.azure.examples.cf' to point to PCF endpoint(s), i.e. PCF loadbalancer/router
+#   Need to add 's3.azure.examples.cf' as a domain to your PCF Org.
+#   Need to map the route '*.s3.azure.examples.cf' for this app.
+#
+#   For JCLOUDS_PROVIDER use 'azureblob' - as a Azure Blobstore back-end
+#   For JCLOUDS_IDENTITY use the Azure Bucket Name
+#   For JCLOUDS_CREDENTIAL use the Azure Access Key 1
+#
+#   For S3PROXY_ENDPOINT use 'http://0.0.0.0:8080' (any available IP address on port 8080, for PCF healthcheck to work)
+#   For S3PROXY_VIRTUALHOST use above domain, e.g. 's3.azure.examples.cf'
+#
+#   For S3PROXY_AUTHORIZATION
+#     use 'none' if you don't want any authentication on your S3 endpoint,
+#     use 'AWS_V2_OR_V4' if you want to enable AWS authentication on S3 endpoint
+#
+#   For S3PROXY_IDENTITY use AWS Key ID
+#   For S3PROXY_CREDENTIAL use AWS Secret Access Key
+#
+#   For S3PROXY_CORS_ALLOW_ALL use 'true' or 'false'
+#   For S3PROXY_IGNORE_UNKNOWN_HEADERS use 'true' or 'false'
+#
+---
+applications:
+- name: s3proxyboot
+  memory: 1G
+  path: target/s3proxyboot-0.0.1-SNAPSHOT.jar
+  routes:
+  - route: '*.s3.azure.examples.cf'
+  env:
+    JCLOUDS_PROVIDER: azureblob
+    JCLOUDS_IDENTITY: <AZURE_BUCKET_NAME>
+    JCLOUDS_CREDENTIAL: <AZURE_ACCESS_KEY_1>
+    S3PROXY_ENDPOINT: http://0.0.0.0:8080
+    S3PROXY_VIRTUALHOST: s3.azure.examples.cf
+    S3PROXY_AUTHORIZATION: none
+    S3PROXY_CORS_ALLOW_ALL: true
+    S3PROXY_IGNORE_UNKNOWN_HEADERS: true
